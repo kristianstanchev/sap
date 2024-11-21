@@ -1,0 +1,66 @@
+resources:
+  - name: script-repo
+    type: git
+    source:
+      uri: https://github.com/kristianstanchev/SAP.git
+      branch: master
+
+  - name: every-5-minutes
+    type: time
+    source:
+      interval: 5m
+  - name: tutorial
+    type: docker-image
+    source:
+      repository: kristianstanchev/tutorial
+      tag: v1
+
+jobs:
+  - name: job
+    public: true
+    plan:
+      - task: simple-task
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: busybox }
+          run:
+            path: echo
+            args: ["Hello SAP!"]
+
+  - name: run-hello-script
+    plan:
+      - get: every-5-minutes
+        trigger: true
+      - get: script-repo
+      - task: execute-script
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+            - name: script-repo
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                 # chmod +x script-repo/bashscript_task2.sh
+                 # ./script-repo/bashscript_task2.sh
+  - name: run-docker-image-task
+    plan:
+      - get: tutorial
+        trigger: true
+      - task: process-yaml-json
+        image: tutorial
+        config:
+          platform: linux
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                echo "Using custom Docker image!"
