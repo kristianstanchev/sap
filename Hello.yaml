@@ -5,6 +5,11 @@ resources:
       uri: https://github.com/kristianstanchev/SAP.git
       branch: master
 
+  - name: every-5-minutes
+    type: time
+    source:
+      interval: 5m
+
 jobs:
   - name: job
     public: true
@@ -21,8 +26,9 @@ jobs:
 
   - name: run-hello-script
     plan:
+      - get: every-5-minutes
+        trigger: true
       - get: script-repo
-        trigger: true  
       - task: execute-script
         config:
           platform: linux
@@ -37,6 +43,5 @@ jobs:
             args:
               - -c
               - |
-                 cd script-repo
-                 chmod +x script-repo/task2.sh
-                 ./task2.sh
+                 # chmod +x script-repo/bashscript_task2.sh
+                 # ./script-repo/bashscript_task2.sh
