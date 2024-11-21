@@ -1,0 +1,42 @@
+resources:
+  - name: script-repo
+    type: git
+    source:
+      uri: https://github.com/kristianstanchev/SAP.git
+      branch: master
+
+jobs:
+  - name: job
+    public: true
+    plan:
+      - task: simple-task
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source: { repository: busybox }
+          run:
+            path: echo
+            args: ["Hello SAP!"]
+
+  - name: run-hello-script
+    plan:
+      - get: script-repo
+        trigger: true  
+      - task: execute-script
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: busybox
+          inputs:
+            - name: script-repo
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
+                 cd script-repo
+                 chmod +x script-repo/task2.sh
+                 ./task2.sh
