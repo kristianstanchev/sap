@@ -1,0 +1,32 @@
+[
+  {
+    "name": "James",
+    "age": 35,
+    "jobTitle": "productOwner"
+  },
+  {
+    "name": "Mary",
+    "age": 45,
+    "secretIdentity": "manager"
+  },
+  {
+    "name": "Patricia",
+    "age": 33,
+    "secretIdentity": "developer"
+  },
+  {
+    "name": "John",
+    "age": 28,
+    "secretIdentity": "developer"
+  },
+  {
+    "name": "Jennifer",
+    "age": 30,
+    "secretIdentity": "scrumMaster"
+  },
+  {
+    "name": "Robert",
+    "age": 22,
+    "secretIdentity": "intern"
+  }
+]
