@@ -53,7 +53,7 @@ jobs:
                 echo "Executing script from Git"
                 chmod +x script-repo/task2.sh
                 sh ./script-repo/task2.sh
-  - name: task5_run_docker_scripts
+  - name: task4_run_docker_scripts
     plan:
       - get: every-5-minutes
         trigger: true
@@ -70,14 +70,35 @@ jobs:
           inputs:
             - name: script-repo
           run:
-            path: /bin/bash
+            path: /bin/sh
             args:
               - -c
               - |
                 echo "Using custom Docker image!"
+  - name: task5_run_personas_scripts
+    plan:
+      - get: every-5-minutes
+        trigger: true
+      - get: tutorial
+      - get: script-repo
+      - task: process-yaml-json
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: kristianstanchev/tutorial
+              tag: v1
+          inputs:
+            - name: script-repo
+          run:
+            path: /bin/sh
+            args:
+              - -c
+              - |
                 cd script-repo
-                ls -l
-                pwd
-                #chmod +x process_personas.py
-                #python3 process_personas.py 
-  
+                chmod +x personas.json
+                chmod +x process_personas.py
+                chmod +w greeted_people.json
+                chmod +x greeted_people.json
+                python3 process_personas.py
