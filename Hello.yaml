@@ -2,29 +2,36 @@ resources:
   - name: script-repo
     type: git
     source:
-      uri: https://github.com/kristianstanchev/SAP.git
+      uri: https://github.com/kristianstanchev/sap.git
       branch: master
-
+      username: "kristianstanchev"
+      password: "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"
   - name: every-5-minutes
     type: time
     source:
       interval: 5m
-
+  - name: tutorial
+    type: docker-image
+    source:
+      repository: kristianstanchev/tutorial
+      tag: v1
 jobs:
-  - name: job
+  - name: task1_hello_sap
     public: true
     plan:
+      - get: every-5-minutes
+        trigger: true
       - task: simple-task
         config:
           platform: linux
           image_resource:
             type: registry-image
-            source: { repository: busybox }
+            source:
+              repository: busybox
           run:
             path: echo
             args: ["Hello SAP!"]
-
-  - name: run-hello-script
+  - name: task2_run_script
     plan:
       - get: every-5-minutes
         trigger: true
@@ -33,7 +40,7 @@ jobs:
         config:
           platform: linux
           image_resource:
-            type: docker-image
+            type: registry-image
             source:
               repository: busybox
           inputs:
@@ -43,5 +50,33 @@ jobs:
             args:
               - -c
               - |
-                 # chmod +x script-repo/bashscript_task2.sh
-                 # ./script-repo/bashscript_task2.sh
+                echo "Executing script from repository..."
+                #chmod +x script-repo/task2.sh
+                #./script-repo/task2.sh || echo "Script failed or not configured correctly"
+  - name: task5_run_docker_scripts
+    plan:
+      - get: every-5-minutes
+        trigger: true
+      - get: tutorial
+      - get: script-repo
+      - task: process-yaml-json
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: kristianstanchev/tutorial
+              tag: v1
+          inputs:
+            - name: script-repo
+          run:
+            path: /bin/bash
+            args:
+              - -c
+              - |
+                echo "Using custom Docker image!"
+                cd script-repo
+                ls -l
+                pwd
+                #chmod +x process_personas.py
+                #python3 process_personas.py || echo "Error running Python script"
