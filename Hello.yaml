@@ -4,8 +4,8 @@ resources:
     source:
       uri: https://github.com/kristianstanchev/sap.git
       branch: master
-      username: "kristianstanchev"
-      password: "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"
+      username: ((github-username))
+      password: ((github-token))
   - name: every-5-minutes
     type: time
     source:
@@ -31,7 +31,7 @@ jobs:
           run:
             path: echo
             args: ["Hello SAP!"]
-  - name: task2_run_script
+  - name: task2_run_script_from_git
     plan:
       - get: every-5-minutes
         trigger: true
@@ -50,9 +50,9 @@ jobs:
             args:
               - -c
               - |
-                echo "Executing script from repository..."
-                #chmod +x script-repo/task2.sh
-                #./script-repo/task2.sh || echo "Script failed or not configured correctly"
+                echo "Executing script from Git"
+                chmod +x script-repo/task2.sh
+                sh ./script-repo/task2.sh
   - name: task5_run_docker_scripts
     plan:
       - get: every-5-minutes
@@ -79,4 +79,5 @@ jobs:
                 ls -l
                 pwd
                 #chmod +x process_personas.py
-                #python3 process_personas.py || echo "Error running Python script"
+                #python3 process_personas.py 
+  
