@@ -1,3 +1,5 @@
+display:
+  background_image: ((background-image))
 resources:
   - name: script-repo
     type: git
