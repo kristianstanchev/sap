@@ -10,13 +10,17 @@ resources:
     type: time
     source:
       interval: 5m
+  - name: every-20min
+    type: time
+    source:
+      interval: 20m
   - name: tutorial
     type: docker-image
     source:
-      repository: kristianstanchev/tutorial
+      repository: ((docker-repo))
       tag: v1
 jobs:
-  - name: task1_hello_sap
+  - name: prsentation-exercise1
     public: true
     plan:
       - get: every-5-minutes
@@ -30,10 +34,10 @@ jobs:
               repository: busybox
           run:
             path: echo
-            args: ["Hello SAP!"]
+            args: ["concourse exercise1!"]
   - name: task2_run_script_from_git
     plan:
-      - get: every-5-minutes
+      - get: every-20min
         trigger: true
       - get: script-repo
       - task: execute-script
