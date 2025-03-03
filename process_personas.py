@@ -3,6 +3,7 @@ import os
 
 # File to store greeted people
 greeted_file = 'greeted_people.txt'
+#greeted people
 
 # Load the personas.json file
 try:
