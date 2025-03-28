@@ -1,10 +1,8 @@
 import os
-#from inspect import stack
 import logging # za da logva vutre v python scripta
 import json # za pipeline confuguration da zapiswa kakvoto fetchne v log file
 import subprocess # za da izpulnqva komandi vutre v python scripta ili s api . 
 import argparse
-#from shutil import rmtree
 
 def arguments_parse(): 
     parser = argparse.ArgumentParser(description="Collect user input for Concourse and Docker.")
