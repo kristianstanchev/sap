@@ -1,10 +1,10 @@
 import os
-from inspect import stack
+#from inspect import stack
 import logging # za da logva vutre v python scripta
 import json # za pipeline confuguration da zapiswa kakvoto fetchne v log file
 import subprocess # za da izpulnqva komandi vutre v python scripta ili s api . 
 import argparse
-from shutil import rmtree
+#from shutil import rmtree
 
 def arguments_parse(): 
     parser = argparse.ArgumentParser(description="Collect user input for Concourse and Docker.")
@@ -13,7 +13,7 @@ def arguments_parse():
     parser.add_argument("--concourse_team", required=True, help="Concourse team name")
     parser.add_argument("--concourse_user", required=True, help="Concourse username")
     parser.add_argument("--concourse_password", required=True, help="Concourse password")
-    parser.add_argument("--iacbox_version", type=int, default=700, help="IACBox version threshold (default: 700)")
+    parser.add_argument("--iacbox_version", type=int, default=700, help="iacBox version (default: 700)")
     args = parser.parse_args()
 
     return vars(args) # vars(args) преобразува обекта Namespace в обикновен речник (dict), за по-лесно използване.
@@ -71,12 +71,12 @@ def extract_pipelines(pipeline_definitions, logger, iacbox_version):#  za da se 
 
     return extracted_data 
                 
-def tag_under_version(tag, version):
+def tag_under_version(tag, iacbox_version):
     if not tag:
-        return False # We do not log empty tags
+        return False 
     if tag.startswith("v") and tag[1:].isdigit():
         tag_version = int(tag[1:])
-        if tag_version < version:
+        if tag_version < iacbox_version:
             return True
     return False
 
