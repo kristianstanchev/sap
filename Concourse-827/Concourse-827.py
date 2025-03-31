@@ -1,7 +1,7 @@
 import os
-import logging # za da logva vutre v python scripta
-import json # za pipeline confuguration da zapiswa kakvoto fetchne v log file
-import subprocess # za da izpulnqva komandi vutre v python scripta ili s api . 
+import logging 
+import json 
+import subprocess 
 import argparse
 
 def arguments_parse(): 
@@ -60,7 +60,7 @@ def extract_pipelines(pipeline_definitions, logger, iacbox_version):#  za da se 
             if isinstance(current, dict):
                 if "plan" in current.keys():
                     job_name = current.get("name") 
-                tag = current.get("tag")
+                tag = current.get("tag", "")
                 if tag_under_version(tag, iacbox_version):#argparse version to check
                     logger.error(f"Job '{job_name}' in pipeline '{pipeline}' has a tag with version '{tag}'!")
                 stack.extend(current.values())  # Добавяме всички стойности от речника в стека
@@ -70,8 +70,7 @@ def extract_pipelines(pipeline_definitions, logger, iacbox_version):#  za da se 
     return extracted_data 
                 
 def tag_under_version(tag, iacbox_version):
-    if not tag:
-        return False 
+
     if tag.startswith("v") and tag[1:].isdigit():
         tag_version = int(tag[1:])
         if tag_version < iacbox_version:
